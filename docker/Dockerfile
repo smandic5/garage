@@ -184,12 +184,22 @@ WORKDIR $HOME/code/garage
 COPY --chown=$user:$user .pre-commit-config.yaml $HOME/code/garage
 RUN git init && \
   pip install pre-commit && \
-  pre-commit install && \
-  pre-commit install-hooks && \
   rm -r $HOME/.cache/pip
 
+# Install Bazelisk (provides the `bazel` command)
+USER root
+RUN wget -q https://github.com/bazelbuild/bazelisk/releases/download/v1.19.0/bazelisk-linux-amd64 \
+    -O /usr/local/bin/bazel && \
+    chmod +x /usr/local/bin/bazel
+USER garage-user
+
+# Use a Bazel version compatible with legacy WORKSPACE builds
+ENV USE_BAZEL_VERSION=5.4.1
+
 # Install deps (but not the code)
+RUN pip install --only-binary=:all: opencv-python
 RUN pip install --upgrade pip setuptools wheel && \
+  pip install "cmake<4" && \
   pip install .[all,dev] && \
   (python -c 'import mujoco_py' || true) && \
   rm $MJKEY_PATH && \

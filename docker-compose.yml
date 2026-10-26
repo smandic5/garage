@@ -1,0 +1,12 @@
+services:
+  python-script:
+    image: garage
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: garage-dev
+    working_dir: /home/garage-user/code/garage
+    volumes:
+      - .:/home/garage-user/code/garage
+      - ~/.mujoco/mjkey.txt:/home/garage-user/.mujoco/mjkey.txt:ro
+    command: python src/garage/examples/torch/maml_ppo_half_cheetah_dir.py
