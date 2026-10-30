@@ -201,6 +201,7 @@ RUN pip install --only-binary=:all: opencv-python
 RUN pip install --upgrade pip setuptools wheel && \
   pip install "cmake<4" && \
   pip install .[all,dev] && \
+  pip install "Cython==0.29.36" && \
   (python -c 'import mujoco_py' || true) && \
   rm $MJKEY_PATH && \
   rm -r $HOME/.cache/pip
