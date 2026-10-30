@@ -19,7 +19,7 @@ from garage.trainer import Trainer
 
 @click.command()
 @click.option('--seed', default=1)
-@click.option('--epochs', default=1000)
+@click.option('--epochs', default=500)
 @click.option('--episodes_per_task', default=40)
 @click.option('--meta_batch_size', default=20)
 @wrap_experiment(snapshot_mode='all')
